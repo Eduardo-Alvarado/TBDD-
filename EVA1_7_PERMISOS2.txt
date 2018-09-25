@@ -1,0 +1,139 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -c root@localhost
+The -c option is deprecated, please use --mysql or -mc instead
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): y
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 5.5.61 MySQL Community Server (GPL)
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306  SQL > show databases
+                          ... ;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| evaluacion_1       |
+| mysql              |
+| performance_schema |
+| test               |
++--------------------+
+5 rows in set (0.0008 sec)
+
+ MySQL  localhost:3306  SQL > use evaluacion_1;
+Default schema set to `evaluacion_1`.
+Fetching table and column names from `evaluacion_1` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306  evaluacion_1  SQL > show tables;
++------------------------+
+| Tables_in_evaluacion_1 |
++------------------------+
+| carrera                |
+| estudiantes            |
+| horario                |
+| jobs                   |
+| materias               |
+| nueva_carrera          |
+| nueva_carrerota        |
+| paises                 |
+| personal               |
+| personal2              |
++------------------------+
+10 rows in set (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > CREATE USER 'LaloConPermisos'@'localhost' IDENTIFIED BY 'sql';
+Query OK, 0 rows affected (0.1726 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc estudiantes
+                                        ... ;
++------------------+--------------+------+-----+---------+-------+
+| Field            | Type         | Null | Key | Default | Extra |
++------------------+--------------+------+-----+---------+-------+
+| no_control       | varchar(10)  | YES  |     | NULL    |       |
+| nombre           | varchar(50)  | YES  |     | NULL    |       |
+| apellido_materno | varchar(50)  | YES  |     | NULL    |       |
+| apellido_paterno | varchar(50)  | YES  |     | NULL    |       |
+| direccion        | varchar(100) | YES  |     | NULL    |       |
+| fecha_nacimiento | date         | YES  |     | NULL    |       |
+| lugar_nacimiento | varchar(50)  | YES  |     | NULL    |       |
+| pais_nacimiento  | varchar(50)  | YES  |     | NULL    |       |
+| genero           | varchar(50)  | YES  |     | NULL    |       |
+| no_telefono      | varchar(50)  | YES  |     | NULL    |       |
++------------------+--------------+------+-----+---------+-------+
+10 rows in set (0.0056 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT SELECT (no_control,nombre,apellido_materno,apellido_paterno)  ON evaluacion_1.estudiantes TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0006 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc materia
+                                        ... ;
+ERROR: 1146 (42S02): Table 'evaluacion_1.materia' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc materias ;
++----------------+--------------+------+-----+---------+-------+
+| Field          | Type         | Null | Key | Default | Extra |
++----------------+--------------+------+-----+---------+-------+
+| nombre         | varchar(100) | YES  |     | NULL    |       |
+| creditos       | int(11)      | YES  |     | NULL    |       |
+| horas_teoria   | int(11)      | YES  |     | NULL    |       |
+| horas_practica | int(11)      | YES  |     | NULL    |       |
+| carrera        | varchar(3)   | YES  |     | NULL    |       |
+| semestre       | int(11)      | YES  |     | NULL    |       |
++----------------+--------------+------+-----+---------+-------+
+6 rows in set (0.0049 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT SELECT (nombre)  ON evaluacion_1.materias TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT INSERT (nombre,creditos)  ON evaluacion_1.materias TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0198 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc paises
+                                        ... ;
++------------+----------------------------------------------------+------+-----+---------+----------------+
+| Field      | Type                                               | Null | Key | Default | Extra          |
++------------+----------------------------------------------------+------+-----+---------+----------------+
+| nombre     | varchar(50)                                        | NO   |     | NULL    |                |
+| clave      | int(11)                                            | NO   | PRI | NULL    | auto_increment |
+| poblacion  | varchar(50)                                        | YES  |     | 1       |                |
+| continente | enum('Africa','America','Asia','Oceania','Europa') | YES  |     | NULL    |                |
++------------+----------------------------------------------------+------+-----+---------+----------------+
+4 rows in set (0.0051 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT SELECT  ON evaluacion_1.materias TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0005 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > REVOKE SELECT  ON evaluacion_1.materias FROM 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT SELECT (nombre)  ON evaluacion_1.materias TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT SELECT  ON evaluacion_1.paises TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0005 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT DELETE ON evaluacion_1.personal TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0005 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > GRANT ALL PRIVILEGES ON evaluacion_1.carrera TO 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0004 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > REVOKE DELETE  ON evaluacion_1.carrera FROM 'LaloConPermisos'@'localhost';
+Query OK, 0 rows affected (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL >

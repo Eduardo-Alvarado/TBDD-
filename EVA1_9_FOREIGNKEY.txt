@@ -1,0 +1,218 @@
+MySQL Shell 8.0.12
+
+Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+
+
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+
+ MySQL  SQL > \connect -c root@localhost
+The -c option is deprecated, please use --mysql or -mc instead
+Creating a Classic session to 'root@localhost'
+Please provide the password for 'root@localhost': ****
+Save password for 'root@localhost:3306'? [Y]es/[N]o/Ne[v]er (default No): y
+Fetching schema names for autocompletion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 5.5.61 MySQL Community Server (GPL)
+No default schema selected; type \use <schema> to set one.
+
+ MySQL  localhost:3306  SQL > use evaluacion_1;
+Default schema set to `evaluacion_1`.
+Fetching table and column names from `evaluacion_1` for auto-completion... Press ^C to stop.
+
+ MySQL  localhost:3306  evaluacion_1  SQL > show tables
+                                        ... ;
++------------------------+
+| Tables_in_evaluacion_1 |
++------------------------+
+| carrera                |
+| compras                |
+| estudiantes            |
+| horario                |
+| jobs                   |
+| materias               |
+| nueva_carrera          |
+| nueva_carrerota        |
+| paises                 |
+| personal               |
+| personal2              |
++------------------------+
+11 rows in set (0.0005 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table factura(
+                                        ... no_factura int auto_increment primary key,
+                                        ... fecha datetime,
+                                        ... ;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table clientes(
+                                        ... no_cliente int auto_increment primary key,
+                                        ... nombre varchar(50),
+                                        ... apellido varchar(50),
+                                        ... rfc varchar(50),
+                                        ... direccion varchar(50),
+                                        ... celular varchar(50));
+Query OK, 0 rows affected (0.0492 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table(
+                                        ... product:;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(
+product:' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table producto(
+                                        ... no_producto int auto_increment primary key,
+                                        ... nombre varchar(50),
+                                        ... precio float);
+Query OK, 0 rows affected (0.0679 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table facturas(
+                                        ... no_factura int auto_increment primary key,
+                                        ... fecha datetime,
+                                        ... no_cliente int
+                                        ... references clientes(no_cliente) on delete restrict on uptdate cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'uptdate cascade)' at line 5
+
+ MySQL  localhost:3306  evaluacion_1  SQL > create table facturas( no_factura int auto_increment primary key, fecha datetime, no_cliente int references clientes(no_cliente));
+Query OK, 0 rows affected (0.0506 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into clientes(nombre, apellido) values('Lalo','Apellido')
+                                        ... ;
+Query OK, 1 row affected (0.0335 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from clientes;
++------------+--------+----------+------+-----------+---------+
+| no_cliente | nombre | apellido | rfc  | direccion | celular |
++------------+--------+----------+------+-----------+---------+
+|          1 | Lalo   | Apellido | NULL | NULL      | NULL    |
++------------+--------+----------+------+-----------+---------+
+1 row in set (0.0130 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into factura(fecha, no_cliente) values ('2018-09-12',1)
+                                        ... ;
+ERROR: 1146 (42S02): Table 'evaluacion_1.factura' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into facturas(fecha, no_cliente) values ('2018-09-12',1) ;
+Query OK, 1 row affected (0.0348 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into facturas(fecha, no_cliente) values ('2018-09-12',2) ;
+Query OK, 1 row affected (0.1719 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into facturas(fecha, no_cliente) values ('2018-09-12',4) ;
+Query OK, 1 row affected (0.0324 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from facturas;
++------------+---------------------+------------+
+| no_factura | fecha               | no_cliente |
++------------+---------------------+------------+
+|          1 | 2018-09-12 00:00:00 |          1 |
+|          2 | 2018-09-12 00:00:00 |          2 |
+|          3 | 2018-09-12 00:00:00 |          4 |
++------------+---------------------+------------+
+3 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > desc clientes;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| no_cliente | int(11)     | NO   | PRI | NULL    | auto_increment |
+| nombre     | varchar(50) | YES  |     | NULL    |                |
+| apellido   | varchar(50) | YES  |     | NULL    |                |
+| rfc        | varchar(50) | YES  |     | NULL    |                |
+| direccion  | varchar(50) | YES  |     | NULL    |                |
+| celular    | varchar(50) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.0052 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > update clientes
+                                        ... set
+                                        ... no_cliente = 5
+                                        ... where no_cliente = 1;
+Query OK, 1 row affected (0.0562 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from cliente;
+ERROR: 1146 (42S02): Table 'evaluacion_1.cliente' doesn't exist
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from clientes;
++------------+--------+----------+------+-----------+---------+
+| no_cliente | nombre | apellido | rfc  | direccion | celular |
++------------+--------+----------+------+-----------+---------+
+|          5 | Lalo   | Apellido | NULL | NULL      | NULL    |
++------------+--------+----------+------+-----------+---------+
+1 row in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from facturas;
++------------+---------------------+------------+
+| no_factura | fecha               | no_cliente |
++------------+---------------------+------------+
+|          1 | 2018-09-12 00:00:00 |          1 |
+|          2 | 2018-09-12 00:00:00 |          2 |
+|          3 | 2018-09-12 00:00:00 |          4 |
++------------+---------------------+------------+
+3 rows in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas add constraint foreing key(no_cliente)
+                                        ... reference clientes(no_cliente) on delete restrict on uptdate cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(no_cliente)
+reference clientes(no_cliente) on delete restrict on uptdate cas' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas (add constraint foreing key(no_cliente) reference clientes(no_cliente) on delete restrict on uptdate cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(add constraint foreing key(no_cliente) reference clientes(no_cliente) on delete' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas (add constraint foreing key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(add constraint foreing key(no_cliente) references clientes(no_cliente) on delet' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas add constraint foreing key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate cascade;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate ca' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > truncate table facturas;
+Query OK, 0 rows affected (0.0216 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas add constraint foreing key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate cascade;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate ca' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas (add constraint foreing key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate cascade);
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(add constraint foreing key(no_cliente) references clientes(no_cliente) on delet' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas add constraint foreing key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate cascade;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate ca' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas add constraint foreign key(no_cliente) references clientes(no_cliente) on delete restrict on uptdate cascade;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'uptdate cascade' at line 1
+
+ MySQL  localhost:3306  evaluacion_1  SQL > alter table facturas add constraint foreign key(no_cliente) references clientes(no_cliente);
+Query OK, 0 rows affected (0.1492 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into facturas(fecha, no_cliente) values ('2018-09-12',1) ;
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`evaluacion_1`.`facturas`, CONSTRAINT `facturas_ibfk_1` FOREIGN KEY (`no_cliente`) REFERENCES `clientes` (`no_cliente`))
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into facturas(fecha, no_cliente) values ('2018-09-12',5) ;
+Query OK, 1 row affected (0.0257 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > insert into facturas(fecha, no_cliente) values ('2018-09-12',3) ;
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`evaluacion_1`.`facturas`, CONSTRAINT `facturas_ibfk_1` FOREIGN KEY (`no_cliente`) REFERENCES `clientes` (`no_cliente`))
+
+ MySQL  localhost:3306  evaluacion_1  SQL > select * from facturas;
++------------+---------------------+------------+
+| no_factura | fecha               | no_cliente |
++------------+---------------------+------------+
+|          2 | 2018-09-12 00:00:00 |          5 |
++------------+---------------------+------------+
+1 row in set (0.0003 sec)
+
+ MySQL  localhost:3306  evaluacion_1  SQL > update clientes set no_cliente = 7 where no_cliente = 5;
+ERROR: 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`evaluacion_1`.`facturas`, CONSTRAINT `facturas_ibfk_1` FOREIGN KEY (`no_cliente`) REFERENCES `clientes` (`no_cliente`))
+
+ MySQL  localhost:3306  evaluacion_1  SQL > truncate table clientes;
+ERROR: 1701 (42000): Cannot truncate a table referenced in a foreign key constraint (`evaluacion_1`.`facturas`, CONSTRAINT `facturas_ibfk_1` FOREIGN KEY (`no_cliente`) REFERENCES `evaluacion_1`.`clientes` (`no_cliente`))
+
+ MySQL  localhost:3306  evaluacion_1  SQL >
